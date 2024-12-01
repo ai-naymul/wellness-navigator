@@ -31,7 +31,7 @@ Welcome to the **Event-Driven Customer Support & Fitness Routine Recommender** p
 ### :movie_camera: Demo
 
 
-https://github.com/user-attachments/assets/cd2ac7fc-3835-4720-b9c2-9b846fe6e261
+![demo](demo/Fitness Planner With Event Driven Customer Support.mp4)
 
 
 
