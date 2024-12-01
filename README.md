@@ -28,6 +28,9 @@ Welcome to the **Event-Driven Customer Support & Fitness Routine Recommender** p
 - **Backend**: Flask application handling form submissions and API interactions.
 - **Workflows**: Defined using Kestra for automating tasks like ticket classification and fitness routine scheduling.
 
+### :movie_camera: Demo
+
+![demo](demo.mp4)
 
 ## 📦 Installation
 
@@ -38,7 +41,7 @@ Welcome to the **Event-Driven Customer Support & Fitness Routine Recommender** p
    ```
 3. Run the Flask application:
    ```bash
-   python src/app.py
+   python app.py
    ```
 
 ## 🤝 Contributing
