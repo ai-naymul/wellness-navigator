@@ -30,7 +30,7 @@ Welcome to the **Event-Driven Customer Support & Fitness Routine Recommender** p
 
 ### :movie_camera: Demo
 
-![demo](demo.mp4)
+![demo](demo/demo.mp4)
 
 ## 📦 Installation
 
