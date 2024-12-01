@@ -1,0 +1,84 @@
+id: fitness-notification-flow-upd
+namespace: fitness-flow-upd
+description: Fetches fitness plans and sends them to users via WhatsApp and email
+
+inputs:
+  - id: name
+    type: STRING
+    required: true
+  - id: age
+    type: INT
+    required: true
+  - id: gender
+    type: STRING
+    required: true
+  - id: body_weight
+    type: INT
+    required: true
+  - id: parts  # New input for targeted muscle parts
+    type: ARRAY
+    itemType: STRING
+    defaults: ["chest"]
+  - id: location  # New input for workout location
+    type: STRING  # e.g., "gym", "home", etc.
+    required: true
+  - id: discord_webhook
+    type: STRING
+    required: true
+  - id: fitness_level
+    type: INT
+    required: true
+    defaults: 3
+
+triggers:
+  - id: weekly_sunday
+    type: io.kestra.plugin.core.trigger.Schedule
+    cron: "47 13 * * SUN"  # Every Sunday at 1:47 PM
+
+tasks:
+  - id: fetch_fitness_plan
+    type: io.kestra.plugin.scripts.python.Script
+    taskRunner:
+      type: io.kestra.plugin.scripts.runner.docker.Docker
+    containerImage: python:slim
+    beforeCommands:
+      - pip install requests kestra 
+    script: |
+      from kestra import Kestra 
+      import requests
+      
+      URL = "https://chatgptplugin.planfit.ai/get-workout-routine/"
+      
+      def get_workout_routine(gender, fitness_level, body_weight, parts, location):
+          payload = {
+              "gender": gender,
+              "fitness_level": fitness_level,
+              "body_weight": body_weight,
+              "parts": parts,
+              "location": location,
+          }
+          response = requests.post(URL, json=payload)
+          if response.status_code == 200:
+              return response.json()
+          else:
+              raise Exception(f"Error: {response.status_code} - {response.text}")
+
+      # User inputs (from Kestra inputs)
+      gender = "{{ inputs.gender }}"
+      fitness_level = {{inputs.fitness_level}}  # Set as needed; adjust based on user input if necessary.
+      body_weight = {{ inputs.body_weight }}
+      parts = {{ inputs.parts }}  # Directly use MULTISELECT input.
+      location = "{{ inputs.location }}"  # Get location from user input.
+
+      workout_routine = get_workout_routine(gender, fitness_level, body_weight, parts, location)
+
+      # Format the output for further tasks
+      formatted_workout = "\n".join([f"- {exercise['name']}: {exercise['reps']} reps at {exercise['weight']} kg\n  Guide: {exercise['guide_url']}" for exercise in workout_routine])
+      
+      Kestra.outputs({'routine': formatted_workout})
+  - id: send_discord_notification
+    type: io.kestra.plugin.notifications.discord.DiscordExecution
+    url: "{{ inputs.discord_webhook }}"
+    embedList:
+      - title: Your Fitness Routine is arrived🎉
+      - description: "Hi {{ inputs.name }}, \n Here is your fitness routine \n: {{outputs.fetch_fitness_plan.vars.routine}}"

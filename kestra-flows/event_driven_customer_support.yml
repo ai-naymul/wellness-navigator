@@ -1,0 +1,65 @@
+id: customer_support_flow-upd
+namespace: customer_support_upd
+description: Automatically classifies and assigns customer support tickets based on roles.
+
+
+inputs:
+  - id: ticket_content
+    type: STRING
+    required: true # Discord user ID for sending notifications
+  - id: email
+    type: STRING
+    required: true
+
+tasks:
+  - id: classify_ticket
+    type: io.kestra.plugin.openai.ChatCompletion
+    model: {{ secret('OPENAI_MODEL_NAME') }}  # Specify the OpenAI model to use
+    apiKey: {{ secret('OPENAI_API_KEY') }}
+    prompt: |
+      Classify the following customer support ticket into one of the categories: Billing, Payment, Service, General.
+      Ticket Content: "{{ inputs.ticket_content }}"
+    temperature: 0.0
+
+  - id: assign_ticket
+    type: io.kestra.plugin.scripts.python.Script
+    script: |
+      import json
+      import requests
+      from kestra import Kestra
+      print("Done success")
+      classified_role = {{ outputs.classify_ticket }}
+      print(type(classified_role))
+
+      try:
+          get_role = classified_role['choices'][-1]['message']['content']
+          print("Extracted Role:", get_role)
+
+          # Mapping of roles to Discord user IDs
+          role_to_user = {
+              "Billing": "{{ secret('BILLING_DISCORD_WEBHOOK') }}",
+              "Payment": "{{ secret('PAYMENT_DISCORD_WEBHOOK') }}",
+              "Service": "{{ secret('SERVICE_DISCORD_WEBHOOK') }}",
+              "General": "{{ secret('GENERAL_DISCORD_WEBHOOK') }}"
+          }
+
+          # Get assigned user ID based on extracted role
+          assigned_user_id = role_to_user.get(get_role)
+          print(assigned_user_id)
+          Kestra.outputs({'assigned_user_id': assigned_user_id, 'role': get_role})
+
+      except json.JSONDecodeError as e:
+          print(f"Error: Unable to parse the classified_role string as JSON. Error: {e}")
+          print(f"Problematic string: {classified_role}")
+      except KeyError as e:
+          print(f"Error: Unable to extract role from the JSON structure. Error: {e}")
+    beforeCommands:
+      - pip install requests kestra
+
+
+  - id: notify_assigned_user
+    type: io.kestra.plugin.notifications.discord.DiscordExecution
+    url: "{{ outputs.assign_ticket.vars.assigned_user_id }}"
+    embedList:
+      - title: A new support ticket has been assigned to you✅
+      - description: "Ticket Content: {{ inputs.ticket_content }}\n Role: {{ outputs.assign_ticket.vars.role }}\n Customer_Email: {{ inputs.email }}"

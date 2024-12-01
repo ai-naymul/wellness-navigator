@@ -1,0 +1,37 @@
+<link rel="stylesheet" href="../static/style.css">
+<div id="container">
+    <h1>&bull; Event Driven Customer Support &bull;</h1>
+    <div class="underline"></div>
+    
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <div class="icon_wrapper">
+    </div>
+
+    <form action="/customer_support" method="post" id="contact_form">
+      <div class="name">
+        <label for="name"></label>
+        <input type="text" placeholder="My name is" name="name" id="name_input" required>
+      </div>
+      <div class="email">
+        <label for="email"></label>
+        <input type="email" placeholder="My e-mail is" name="email" id="email_input" required>
+      </div>
+      <div class="message">
+        <label for="message"></label>
+        <textarea name="message" placeholder="I'd like to chat about" id="message_input" cols="30" rows="5" required></textarea>
+      </div>
+      <div class="submit">
+        <input type="submit" value="Send Message" id="form_button"/>
+      </div>
+    </form><!-- // End form -->
+</div><!-- // End #container -->

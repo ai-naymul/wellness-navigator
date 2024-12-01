@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="../static/style.css">
+<div id="container">
+    <h1>&bull; Fitness Routine Recommender &bull;</h1>
+    <div class="underline"></div>
+    
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <div class="icon_wrapper"></div>
+    <form action="/fitness-routine" method="post" id="contact_form">
+      <div class="name">
+        <label for="name"></label>
+        <input type="text" placeholder="My name is" name="name" id="name_input" required>
+      </div>
+      <div class="email">
+        <label for="age"></label>
+        <input type="text" placeholder="My age is" name="age" id="age_input" required>
+      </div>
+      <div class="email">
+        <label for="gender"></label>
+        <input type="text" placeholder="My gender is" name="gender" id="gender_input" required>
+      </div>
+      <div class="email">
+        <label for="body_weight"></label>
+        <input type="text" placeholder="My body weight is" name="body_weight" id="body_weight_input" required>
+      </div>
+      <div class="email">
+        <label for="parts"></label>
+        <select name="parts" id="parts_input" required>
+          <option value="" disabled selected>Select parts</option>
+          <option value="arms">Arms</option>
+          <option value="chest">Chest</option>
+          <option value="legs">Legs</option>
+          <!-- Add more options as needed -->
+        </select>
+      </div>
+      <div class="email">
+        <label for="location"></label>
+        <input type="text" placeholder="My location is" name="location" id="location_input" required>
+      </div>
+      <div class="email">
+        <label for="fitness_level"></label>
+        <input type="text" placeholder="My fitness level is" name="fitness_level" id="fitness_level_input" required>
+      </div>
+      <div class="discord_webhook">
+        <label for="discord_webhook"></label>
+        <input type="text" placeholder="Discord webhook URL" name="discord_webhook" id="discord_webhook_input">
+      </div>
+
+      <div class="submit">
+        <input type="submit" value="Get Your Personalized Fitness Routine" id="form_button"/>
+        <a href="customer_support" id="contact_button">Customer Support</a>
+      </div>
+    </form><!-- // End form -->
+</div><!-- // End #container -->

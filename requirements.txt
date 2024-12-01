@@ -1,0 +1,11 @@
+flask
+requests
+python-dotenv
+gunicorn
+psycopg2-binary
+flask-sqlalchemy
+flask-migrate
+flask-jwt-extended
+flask-cors
+kestra
+email-validator
