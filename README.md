@@ -55,6 +55,30 @@ Welcome to the **Event-Driven Customer Support & Fitness Routine Recommender** p
    python app.py
    ```
 
+## 🎯 API Endpoints
+
+### Customer Support
+- `POST /customer_support`: Submit a support ticket
+  - Required fields: name, email, message
+
+### Fitness Routine
+- `POST /fitness-routine`: Get personalized fitness routine
+  - Required fields: name, age, gender, body_weight, parts, location, fitness_level, discord_webhook
+
+## 🔒 Security
+
+- All API keys and sensitive data should be stored in environment variables
+- Discord webhooks should be kept private
+- HTTPS is required for production deployment
+
+## 📈 Future Improvements
+
+- [ ] Add user authentication
+- [ ] Implement real-time chat support
+- [ ] Add more fitness routine customization options
+- [ ] Create mobile app version
+- [ ] Integrate with more messaging platforms
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
