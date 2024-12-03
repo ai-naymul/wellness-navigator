@@ -14,6 +14,20 @@ Welcome to the **Event-Driven Customer Support & Fitness Routine Recommender** p
    - The routine is sent to the user via Discord.
    - A weekly fitness routine is scheduled to be sent every Sunday.
 
+## 🛠 Benefits
+
+1. **Automated Customer Support**: Streamlines the support process by automatically classifying and assigning tickets, reducing response time and improving customer satisfaction.
+
+2. **Personalized Fitness Recommendations**: Offers tailored fitness routines based on user input, enhancing user engagement and promoting healthier lifestyles.
+
+3. **Seamless Integration with Discord**: Utilizes Discord for notifications, ensuring users and support teams receive timely updates and communications.
+
+4. **Efficient Workflow Management**: Leverages Kestra for workflow orchestration, enabling efficient task automation and scheduling.
+
+5. **User-Friendly Interface**: Provides an intuitive and easy-to-navigate interface, making it accessible for users of all technical levels.
+
+6. **Scalable Architecture**: Built with Flask, allowing for easy scaling and deployment to accommodate growing user bases and feature expansions.
+
 ## 🛠️ Technologies Used
 
 - **Flask**: A lightweight WSGI web application framework in Python.
